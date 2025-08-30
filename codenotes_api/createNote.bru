@@ -1,0 +1,27 @@
+meta {
+  name: createNote
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3001/note
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQyLCJlbWFpbCI6ImFsOTE4NkBnbWFpbC5jb20iLCJpYXQiOjE3NTY0MDMxMDcsImV4cCI6MTc1NjQwNjcwN30.lvXVRbh80pY3ukELjKWmi65EhT1MgLuLRlWZDXsa_i0
+}
+
+body:json {
+  { 
+    "title": "Como usar if no python",
+    "code": "if num > 0: print('é maior que 0')",
+    "language": "python"
+  }  
+}
+
+settings {
+  encodeUrl: true
+}
