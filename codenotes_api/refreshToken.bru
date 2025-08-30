@@ -1,0 +1,15 @@
+meta {
+  name: refreshToken
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/auth/refresh
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

@@ -4,9 +4,13 @@ import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/users/users.module';
+import { RefreshToken } from 'src/refresh-token/entities/RefreshToken.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 
 @Module({
     imports: [
+        TypeOrmModule.forFeature([RefreshToken]),
         forwardRef(() => UsersModule),
         JwtModule.registerAsync({
         global: true,
@@ -18,7 +22,7 @@ import { UsersModule } from 'src/users/users.module';
         inject: [ConfigService]
     })],
   controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [AuthService, RefreshTokenService],
+  exports: [AuthService, RefreshTokenService],
 })
 export class AuthModule {}

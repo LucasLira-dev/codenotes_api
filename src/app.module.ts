@@ -6,11 +6,12 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { NoteModule } from './note/note.module';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 
 @Module({
   imports: [DatabaseModule, UsersModule, AuthModule, ConfigModule.forRoot({
     isGlobal: true,
-  }), NoteModule],
+  }), NoteModule, RefreshTokenModule],
   controllers: [AppController],
   providers: [AppService],
 })
