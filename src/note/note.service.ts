@@ -34,7 +34,7 @@ export class NoteService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} note`;
+    return this.noteRepository.findOne({ where: { id }})
   }
 
   async update(id: number, updateNoteDto: UpdateNoteDto) {
