@@ -38,7 +38,8 @@ export class NoteService {
   }
 
   async update(id: number, updateNoteDto: UpdateNoteDto) {
-    return await this.noteRepository.update(id, updateNoteDto)
+    await this.noteRepository.update(id, updateNoteDto)
+    return await this.noteRepository.findOne({ where: { id }})
   }
 
   async remove(id: number) {
