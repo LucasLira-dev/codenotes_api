@@ -7,12 +7,13 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { NoteModule } from './note/note.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [DatabaseModule, UsersModule, AuthModule, ConfigModule.forRoot({
     isGlobal: true,
   }), NoteModule, RefreshTokenModule],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [AppService],
 })
 export class AppModule {}
