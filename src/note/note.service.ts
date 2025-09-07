@@ -29,7 +29,8 @@ export class NoteService {
 
   async findAllByUser(userId: number) {
     return await this.noteRepository.find({
-      where: { user: { id: userId } }    
+      where: { user: { id: userId } },
+      order: { createdAt: 'DESC' } // Ordena por data de criação decrescente
     })
   }
 
