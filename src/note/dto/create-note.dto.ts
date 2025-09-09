@@ -4,12 +4,11 @@ export class CreateNoteDto {
 
     @IsString()
     @MinLength(3)
-    @MaxLength(256)
+    @MaxLength(500)
     title: string;
 
     @IsString()
-    @MinLength(5)
-    @MaxLength(512)
+    @MinLength(2)
     code: string;
 
     @IsString()
