@@ -34,4 +34,9 @@ export class NoteController {
   remove(@Param('id') id: string) {
     return this.noteService.remove(+id);
   }
+
+  @Get('search/:query')
+  async search(@Request() req: { user: { sub: number } }, @Param('query') query: string) {
+    return this.noteService.searchNotes(req.user.sub, query);
+  }
 }

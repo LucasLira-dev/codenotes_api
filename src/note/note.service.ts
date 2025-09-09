@@ -3,7 +3,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { Note } from './entities/note.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -14,7 +14,6 @@ export class NoteService {
       private readonly noteRepository: Repository<Note>
     ) { }
   
-
   async create(id: number, createNoteDto: CreateNoteDto) {
     // Crie o objeto User apenas com o id
     const user = new User();
@@ -49,5 +48,15 @@ export class NoteService {
       throw new Error(`Note with id ${id} not found`);
     }
     return await this.noteRepository.remove(note);
+  }
+
+  async searchNotes(userId: number, query: string) {
+    return await this.noteRepository.find({
+      where: [
+        { user: { id: userId }, title:  ILike(`%${query}%`) },
+        { user: { id: userId }, code: ILike(`%${query}%`) },
+        { user: { id: userId }, language: ILike(`%${query}%`) }
+      ]
+    })
   }
 }
