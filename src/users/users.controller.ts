@@ -39,4 +39,11 @@ export class UsersController {
     return this.usersService.updatePassword(userId, updatePasswordDto.currentPassword, updatePasswordDto.newPassword);
   }
 
+  @UseGuards(AuthGuard)
+  @Delete('DeleteAccount')
+  async remove(@Request() req) {
+    const userId = req.user.id;
+    return this.usersService.remove(userId);
+  }
+
 }

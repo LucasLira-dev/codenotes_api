@@ -49,7 +49,7 @@ export class UsersService {
     }
 
     user.email = newEmail;
-    await this.userRepository.save(user);
+    await this.userRepository.update(userId, { email: newEmail });
 
     return { message: 'Email atualizado com sucesso', email: newEmail };
   }
@@ -66,8 +66,18 @@ export class UsersService {
     }
 
     user.password = hashSync(newPassword, 10);
-    await this.userRepository.save(user);
+    await this.userRepository.update(userId, { password: user.password });
 
     return { message: 'Senha atualizada com sucesso' };
+  }
+
+  async remove(userId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado');
+    }
+
+    await this.userRepository.delete(userId);
+    return { message: 'Usuário removido com sucesso' };
   }
 }
