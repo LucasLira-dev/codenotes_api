@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { compareSync, hashSync } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,8 @@ export class UsersService {
   
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService
   ) { }
 
 
@@ -51,7 +53,10 @@ export class UsersService {
     user.email = newEmail;
     await this.userRepository.update(userId, { email: newEmail });
 
-    return { message: 'Email atualizado com sucesso', email: newEmail };
+    const payload = { sub: user.id, email: newEmail };
+    const token = this.jwtService.sign(payload);
+
+    return { message: 'Email atualizado com sucesso', email: newEmail, token };
   }
 
     async updatePassword(userId: number, currentPassword: string, newPassword: string) {
