@@ -28,21 +28,21 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Patch('updateEmail')
   async updateEmail(@Body() updateEmailDto: { email: string }, @Request() req) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.usersService.updateEmail(userId, updateEmailDto.email);
   }
 
   @UseGuards(AuthGuard)
   @Patch('updatePassword')
   async updatePassword(@Body() updatePasswordDto: { currentPassword: string; newPassword: string }, @Request() req) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.usersService.updatePassword(userId, updatePasswordDto.currentPassword, updatePasswordDto.newPassword);
   }
 
   @UseGuards(AuthGuard)
   @Delete('DeleteAccount')
   async remove(@Request() req) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.usersService.remove(userId);
   }
 
