@@ -10,7 +10,6 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UsersService {
 
-  
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -39,7 +38,7 @@ export class UsersService {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async updateEmail(userId: number, newEmail: string) {
+  async updateEmail(userId: number, newEmail: string, password: string) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new BadRequestException('Usuário não encontrado');
@@ -48,6 +47,10 @@ export class UsersService {
     const existingEmail = await this.userRepository.findOne({ where: { email: newEmail } });
     if (existingEmail) {
       throw new BadRequestException('Email já está em uso');
+    }
+
+    if (!compareSync(password, user.password)) {
+      throw new BadRequestException('Senha incorreta');
     }
 
     user.email = newEmail;

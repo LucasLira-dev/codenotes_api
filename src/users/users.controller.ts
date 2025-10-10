@@ -27,9 +27,9 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Patch('updateEmail')
-  async updateEmail(@Body() updateEmailDto: { email: string }, @Request() req) {
+  async updateEmail(@Body() updateEmailDto: { email: string, password: string }, @Request() req) {
     const userId = req.user.sub;
-    return this.usersService.updateEmail(userId, updateEmailDto.email);
+    return this.usersService.updateEmail(userId, updateEmailDto.email, updateEmailDto.password);
   }
 
   @UseGuards(AuthGuard)
