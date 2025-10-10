@@ -1,10 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { compareSync, hashSync } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -25,7 +24,7 @@ export class UsersService {
 
     const dbUser = new User();
     dbUser.email = createUserDto.email;
-    dbUser.password = hashSync(createUserDto.password, 10); //criptografa a senha
+    dbUser.password = bcrypt.hashSync(createUserDto.password, 10); //criptografa a senha
 
     await this.userRepository.save(dbUser);
 
@@ -45,11 +44,11 @@ export class UsersService {
     }
 
     const existingEmail = await this.userRepository.findOne({ where: { email: newEmail } });
-    if (existingEmail) {
+    if (existingEmail && existingEmail.id !== userId) {
       throw new BadRequestException('Email já está em uso');
     }
 
-    if (!compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       throw new BadRequestException('Senha incorreta');
     }
 
@@ -69,11 +68,11 @@ export class UsersService {
     }
 
     // Verifica se a senha atual está correta
-    if (!compareSync(currentPassword, user.password)) {
+    if (!bcrypt.compareSync(currentPassword, user.password)) {
       throw new BadRequestException('Senha atual incorreta');
     }
 
-    user.password = hashSync(newPassword, 10);
+    user.password = bcrypt.hashSync(newPassword, 10);
     await this.userRepository.update(userId, { password: user.password });
 
     return { message: 'Senha atualizada com sucesso' };
